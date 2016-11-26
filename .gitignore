@@ -27,3 +27,7 @@
 *.exe
 *.out
 *.app
+
+# User define
+/cmake-build-debug
+/.idea

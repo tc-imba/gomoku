@@ -1,0 +1,60 @@
+base:
+  db: mongodb://localhost/portal
+  secret: your_secret
+  port: 80
+  host: http://127.0.0.1
+  cspReportUrl: /
+  urlPrefix: ''
+  cdnPrefix: ''
+  ssoUrl: http://127.0.0.1:20212   # false to enable debug mode and bypass SSO
+  api:
+    credential:
+      username: foo
+      password: bar
+  compile:
+    limits:
+      sizeOfCode: 1048576     # 1 MB
+      sizeOfBin: 1048576      # 1 MB
+      sizeOfText: 102400      # 100 KB
+      submitInterval: 86400000 # 1 day
+  match:
+    rules:
+      moveTimeout: 5000       # 5 s
+      roundTimeout: 180000    # 180 s
+      memoryLimit: 367001600  # 350 MB
+      width: 20
+      height: 20
+      winningStones: 5
+    rounds: 3
+    openings:
+      - opening1
+      - opening2
+      - opening3
+      - opening4
+      - opening5
+      - opening6
+      - opening7
+      - opening8
+      - opening9
+      - opening10
+      - opening11
+      - opening12
+      - opening13
+      - opening14
+      - opening15
+      - opening16
+  mq:
+    vhosts:
+      /:
+        connection:
+          hostname: localhost
+          user: guest
+          password: guest
+        queues:
+          - gomoku_compile
+          - gomoku_judge
+        publications:
+          compile:
+            queue: gomoku_compile
+          judge:
+            queue: gomoku_judge
