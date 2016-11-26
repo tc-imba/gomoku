@@ -7,7 +7,6 @@
 #include <string>
 #include <sstream>
 #include <stdlib.h>
-#include <time.h>
 
 using namespace std;
 
@@ -32,11 +31,9 @@ Position getPos(string str)
 
 int main()
 {
-    srand(time(0));
-    cout<<rand()%22+1;
 
     int openings[26][3][2] = {};
-    ofstream out("openings.h");
+    ofstream out("includes/openings.h");
     int order[3] = {0, 2, 1};
     out << "const int openings[OPENING_NUM][3][2]={";
     for (int i = 0; i < 26; i++)
