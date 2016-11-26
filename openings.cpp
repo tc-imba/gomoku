@@ -7,38 +7,108 @@
 #include <string>
 #include <sstream>
 #include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
+struct Position
+{
+    int x, y;
+};
+
+Position getPos(string str)
+{
+    stringstream ss(str);
+    char c;
+    int n;
+    ss >> c >> n;
+    n = 15 - n;
+    Position pos;
+    pos.x = n;
+    pos.y = c - 'A';
+    return pos;
+}
+
+
 int main()
 {
-    ofstream out("openings.txt");
+    srand(time(0));
+    cout<<rand()%22+1;
+
+    int openings[26][3][2] = {};
+    ofstream out("openings.h");
     int order[3] = {0, 2, 1};
-    for (int i = 1; i <= 26; i++)
+    out << "const int openings[OPENING_NUM][3][2]={";
+    for (int i = 0; i < 26; i++)
     {
         stringstream ss;
         string num;
-        ss << i;
+        ss << i + 1;
         ss >> num;
         string filename = "./openings/opening";
         filename += num + ".json";
         ifstream in(filename);
         string temp;
         char c;
-        int a[3][2] = {};
+        //int a[3][2] = {};
         for (int j = 0; j < 3; j++)
         {
             getline(in, temp);
-            in >> c >> a[j][0] >> c >> a[j][1];
+            in >> c >> openings[i][j][0] >> c >> openings[i][j][1];
         }
         in.close();
+        out << "{";
         for (int j = 0; j < 3; j++)
         {
-            out << "openings[" << i - 1 << "][" << order[j] << "].x=" << a[j][0] << ";" << endl;
-            out << "openings[" << i - 1 << "][" << order[j] << "].y=" << a[j][1] << ";" << endl;
+            out << "{" << openings[i][order[j]][0] << "," << openings[i][order[j]][1] << "},";
+            //out << "openings[" << i << "][" << order[j] << "].x=" << openings[i][j][0] << ";" << endl;
+            //out << "openings[" << i << "][" << order[j] << "].y=" << openings[i][j][1] << ";" << endl;
         }
-        out << endl;
+        out << "},";
     }
+    out << "};" << endl;
+    //out.close();
+    ifstream in("./openings/formula.txt");
+    //out.open("formula.h");
+    out << "const char* formula[OPENING_NUM][4]={";
+    int formula_pos[26][2] = {};
+    for (int i = 0; i < 26; i++)
+    {
+        int n, a, b;
+        in >> n >> a >> b;
+        if (n != i + 1)
+        {
+            cerr << "File Error at fornula " << i + 1 << endl;
+            return -1;
+        }
+        formula_pos[i][0] = a;
+        formula_pos[i][1] = b;
+        string temp;
+        getline(in, temp);
+        out << "{";
+        for (int j = 0; j < a; j++)
+        {
+            string str;
+            getline(in, temp);
+            out << "\"" << temp << "\",";
+            stringstream ss(temp);
+            ss >> str;
+            auto pos = getPos(str);
+            while (!ss.eof())
+            {
+                ss >> str;
+            }
+        }
+        out << "},";
+        getline(in, temp);
+    }
+    out << "};" << endl;
+    out << "const int formula_pos[OPENING_NUM][2]={";
+    for (int i = 0; i < 26; i++)
+    {
+        out << "{" << formula_pos[i][0] << "," << formula_pos[i][1] << "},";
+    }
+    out << "};" << endl;
     out.close();
     return 0;
 }

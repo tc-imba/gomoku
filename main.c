@@ -36,211 +36,36 @@ void debug(const char *str)
 
 /*
  * YOUR CODE BEGIN
- * ƒ„µƒ¥˙¬Îø™ º 
+ * ‰Ω†ÁöÑ‰ª£Á†ÅÂºÄÂßã 
  */
 
 /* 
  * You can define your own struct and variable here
- * ƒ„ø…“‘‘⁄’‚¿Ô∂®“Âƒ„◊‘º∫µƒΩ·ππÃÂ∫Õ±‰¡ø
+ * ‰Ω†ÂèØ‰ª•Âú®ËøôÈáåÂÆö‰πâ‰Ω†Ëá™Â∑±ÁöÑÁªìÊûÑ‰ΩìÂíåÂèòÈáè
  */
 
 #define DEBUG
+// #define RELEASE
 
 unsigned int round;
 
 #define OPENING_NUM 26
-struct Position openings[OPENING_NUM][3];
-int opening;
+const int openings[OPENING_NUM][3][2];
+const char *formula[OPENING_NUM][4];
+const int formula_pos[OPENING_NUM][2];
+int openingId;
 
-void initOpenings()
-{
+
 #ifdef DEBUG
 
-#include "openings.txt"
+#include "openings.h"
+
 #else
-    openings[0][0].x = 7;
-    openings[0][0].y = 7;
-    openings[0][2].x = 7;
-    openings[0][2].y = 6;
-    openings[0][1].x = 7;
-    openings[0][1].y = 8;
-
-    openings[1][0].x = 7;
-    openings[1][0].y = 7;
-    openings[1][2].x = 7;
-    openings[1][2].y = 6;
-    openings[1][1].x = 8;
-    openings[1][1].y = 7;
-
-    openings[2][0].x = 7;
-    openings[2][0].y = 7;
-    openings[2][2].x = 7;
-    openings[2][2].y = 6;
-    openings[2][1].x = 8;
-    openings[2][1].y = 7;
-
-    openings[3][0].x = 7;
-    openings[3][0].y = 7;
-    openings[3][2].x = 7;
-    openings[3][2].y = 6;
-    openings[3][1].x = 8;
-    openings[3][1].y = 5;
-
-    openings[4][0].x = 7;
-    openings[4][0].y = 7;
-    openings[4][2].x = 7;
-    openings[4][2].y = 6;
-    openings[4][1].x = 7;
-    openings[4][1].y = 5;
-
-    openings[5][0].x = 7;
-    openings[5][0].y = 7;
-    openings[5][2].x = 7;
-    openings[5][2].y = 6;
-    openings[5][1].x = 7;
-    openings[5][1].y = 9;
-
-    openings[6][0].x = 7;
-    openings[6][0].y = 7;
-    openings[6][2].x = 7;
-    openings[6][2].y = 6;
-    openings[6][1].x = 9;
-    openings[6][1].y = 7;
-
-    openings[7][0].x = 7;
-    openings[7][0].y = 7;
-    openings[7][2].x = 8;
-    openings[7][2].y = 6;
-    openings[7][1].x = 8;
-    openings[7][1].y = 8;
-
-    openings[8][0].x = 7;
-    openings[8][0].y = 7;
-    openings[8][2].x = 8;
-    openings[8][2].y = 6;
-    openings[8][1].x = 8;
-    openings[8][1].y = 7;
-
-    openings[9][0].x = 7;
-    openings[9][0].y = 7;
-    openings[9][2].x = 8;
-    openings[9][2].y = 6;
-    openings[9][1].x = 7;
-    openings[9][1].y = 8;
-
-    openings[10][0].x = 7;
-    openings[10][0].y = 7;
-    openings[10][2].x = 8;
-    openings[10][2].y = 6;
-    openings[10][1].x = 9;
-    openings[10][1].y = 6;
-
-    openings[11][0].x = 7;
-    openings[11][0].y = 7;
-    openings[11][2].x = 8;
-    openings[11][2].y = 6;
-    openings[11][1].x = 8;
-    openings[11][1].y = 9;
-
-    openings[12][0].x = 7;
-    openings[12][0].y = 7;
-    openings[12][2].x = 8;
-    openings[12][2].y = 6;
-    openings[12][1].x = 6;
-    openings[12][1].y = 9;
-
-    openings[13][0].x = 7;
-    openings[13][0].y = 7;
-    openings[13][2].x = 8;
-    openings[13][2].y = 6;
-    openings[13][1].x = 9;
-    openings[13][1].y = 8;
-
-    openings[14][0].x = 7;
-    openings[14][0].y = 7;
-    openings[14][2].x = 8;
-    openings[14][2].y = 6;
-    openings[14][1].x = 9;
-    openings[14][1].y = 7;
-
-    openings[15][0].x = 7;
-    openings[15][0].y = 7;
-    openings[15][2].x = 8;
-    openings[15][2].y = 6;
-    openings[15][1].x = 7;
-    openings[15][1].y = 9;
-
-    openings[16][0].x = 7;
-    openings[16][0].y = 7;
-    openings[16][2].x = 7;
-    openings[16][2].y = 6;
-    openings[16][1].x = 9;
-    openings[16][1].y = 6;
-
-    openings[17][0].x = 7;
-    openings[17][0].y = 7;
-    openings[17][2].x = 7;
-    openings[17][2].y = 6;
-    openings[17][1].x = 9;
-    openings[17][1].y = 8;
-
-    openings[18][0].x = 7;
-    openings[18][0].y = 7;
-    openings[18][2].x = 7;
-    openings[18][2].y = 6;
-    openings[18][1].x = 8;
-    openings[18][1].y = 8;
-
-    openings[19][0].x = 7;
-    openings[19][0].y = 7;
-    openings[19][2].x = 7;
-    openings[19][2].y = 6;
-    openings[19][1].x = 8;
-    openings[19][1].y = 9;
-
-    openings[20][0].x = 7;
-    openings[20][0].y = 7;
-    openings[20][2].x = 7;
-    openings[20][2].y = 6;
-    openings[20][1].x = 9;
-    openings[20][1].y = 9;
-
-    openings[21][0].x = 7;
-    openings[21][0].y = 7;
-    openings[21][2].x = 7;
-    openings[21][2].y = 6;
-    openings[21][1].x = 9;
-    openings[21][1].y = 5;
-
-    openings[22][0].x = 7;
-    openings[22][0].y = 7;
-    openings[22][2].x = 8;
-    openings[22][2].y = 6;
-    openings[22][1].x = 6;
-    openings[22][1].y = 8;
-
-    openings[23][0].x = 7;
-    openings[23][0].y = 7;
-    openings[23][2].x = 8;
-    openings[23][2].y = 6;
-    openings[23][1].x = 9;
-    openings[23][1].y = 5;
-
-    openings[24][0].x = 7;
-    openings[24][0].y = 7;
-    openings[24][2].x = 8;
-    openings[24][2].y = 6;
-    openings[24][1].x = 9;
-    openings[24][1].y = 9;
-
-    openings[25][0].x = 7;
-    openings[25][0].y = 7;
-    openings[25][2].x = 8;
-    openings[25][2].y = 6;
-    openings[25][1].x = 5;
-    openings[25][1].y = 9;
+const int openings[OPENING_NUM][3][2]={{{7,7},{7,8},{7,6},},{{7,7},{8,7},{7,6},},{{7,7},{8,7},{7,6},},{{7,7},{8,5},{7,6},},{{7,7},{7,5},{7,6},},{{7,7},{7,9},{7,6},},{{7,7},{9,7},{7,6},},{{7,7},{8,8},{8,6},},{{7,7},{8,7},{8,6},},{{7,7},{7,8},{8,6},},{{7,7},{9,6},{8,6},},{{7,7},{8,9},{8,6},},{{7,7},{6,9},{8,6},},{{7,7},{9,8},{8,6},},{{7,7},{9,7},{8,6},},{{7,7},{7,9},{8,6},},{{7,7},{9,6},{7,6},},{{7,7},{9,8},{7,6},},{{7,7},{8,8},{7,6},},{{7,7},{8,9},{7,6},},{{7,7},{9,9},{7,6},},{{7,7},{9,5},{7,6},},{{7,7},{6,8},{8,6},},{{7,7},{9,5},{8,6},},{{7,7},{9,9},{8,6},},{{7,7},{5,9},{8,6},},};
+const char* formula[OPENING_NUM][4]={{"I8 G7 I7 J7","J7 G7 I7 I8",},{"G8 I10","J8 I7","I9 J8 G8","I7 J10",},{"H6 I8","J8 I6","H10 I7 I8 J9","I10 G8 I8",},{"I8 G9","I9 J9","I7 G9 J9 J10","J10 I8 G9 G8",},{"I10 G8 G9 I9","J10 F8 G9","H11 G7 I9","J9 F8 G9 I9",},{"I10 I7","I7 G7 I6 J7","H7 I5 I7","J7 G7 I8",},{"G8 I10","I10 I7","G7 I7 I8 I9","I9 I7 I8",},{"G9 J7 J8","H7 G9 J6 J8","H6 G9 I6 J6 J7","J6 G8 G9 H9 H10",},{"J8 H10","G8 H7","H9 G8 J8","H7 G10",},{"J8 H10","I8 I7","K8 H7 H10 I7","H7 I10 J8 J10",},{"H9 G9","H6 G8 I8","G8 H6 I8","G9 H9 I8",},{"I10 H7","J8 H7","H9 G9","G9 J7",},{"H9 G9","I10 G9 E8","I8 H6 I6","J7 H6 H9",},{"I7 H6 I6","I5 G8 I6","J8 I7 K7","H7 I6 J6",},{"I8 I7","H7 I7","I7 I8","H6 I8 J9",},{"H9 G9","G9 J9","I10 I7 J8","H7 F8 G7 I7",},{"J8 I7","G8 I10","G7 I8 I10","J10 I7 I8",},{"G8 I10","I10 G8","G7 I6","I9 J9",},{"G9 F9",},{"G10 I8","F7 G8","I10 G8","G7 G7 I7 J7",},{"G8 F7",},{"I9 G9 I9 I11 J8 J9","I8 I9 J7 J9","G7 I9 I11","G8 I9 I10",},{"H9 J9","I10 I7","G9 F7 F8","G8 F6 F7 H6",},{"H10 J8","H9 G9 I8 I10 I11 J8 J9","I7 H10 I8 I10 K9","H11 I8 I11 J8 J9",},{"G7 J9","I7 H6 I6 I8 K7","G8 J7","H9 I7 J9",},{"I10 I8",},};
+const int formula_pos[OPENING_NUM][2]={{2,2},{4,3},{4,1},{4,1},{4,4},{4,1},{4,2},{4,1},{4,3},{4,1},{4,1},{4,1},{4,1},{4,1},{4,3},{4,3},{4,2},{4,4},{1,1},{4,3},{1,1},{4,1},{4,1},{4,1},{4,2},{1,1},};
 #endif
-}
+
 
 int verifyOpening(const char board[BOARD_SIZE][BOARD_SIZE])
 {
@@ -250,7 +75,7 @@ int verifyOpening(const char board[BOARD_SIZE][BOARD_SIZE])
         int count = 0;
         for (int j = 0; j < 3; j++)
         {
-            if (board[openings[i][j].x][openings[i][j].y] == order[j])
+            if (board[openings[i][j][0]][openings[i][j][1]] == order[j])
             {
                 count++;
             }
@@ -267,9 +92,30 @@ int verifyOpening(const char board[BOARD_SIZE][BOARD_SIZE])
     return -1;
 }
 
+struct Position getPos(char *str)
+{
+
+}
+
+void initOpening()
+{
+    if (openingId >= 0 && openingId < OPENING_NUM)
+    {
+        return;
+    }
+    for (int i = 0; i < formula_pos[openingId][0]; i++)
+    {
+        const char *p = formula[openingId][i];
+        while (p++)
+        {
+            
+        }
+    }
+}
+
 /*
  * You should init your AI here
- * ‘⁄’‚¿Ô≥ı ºªØƒ„µƒAI
+ * Âú®ËøôÈáåÂàùÂßãÂåñ‰Ω†ÁöÑAI
  */
 void initAI()
 {
@@ -278,52 +124,50 @@ void initAI()
 #endif
     round = 0;
 
-    // ≥ı ºªØø™æ÷∂® Ω
-    initOpenings();
+    // ÂàùÂßãÂåñÂºÄÂ±ÄÂÆöÂºè
+
 
 }
+
 
 /*
  * Game Start, you will put the first chess.
  * Warning: This method will only be called when after the initialize ofi the  map, it is your turn to put the chess. 
  * Or this method will not be called.
  * You should return a valid Position variable.
- * ∆Âæ÷ø™ º£¨ ◊œ»”…ƒ„¿¥¬‰◊”
- * «Î◊¢“‚£∫÷ª”–‘⁄µ±∆Âæ÷≥ı ºªØ∫Û£¨¬÷µΩƒ„¬‰◊” ±≤≈ª·¥•∑¢’‚∏ˆ∫Ø ˝°£»Áπ˚‘⁄∆Âæ÷≥ı ºªØÕÍ±œ∫Û£¨¬÷µΩ∂‘ ÷¬‰◊”£¨‘Ú’‚∏ˆ∫Ø ˝≤ªª·±ª¥•∑¢°£œÍº˚œÓƒø“™«Û°£
- * ‘⁄’‚¿Ô£¨meµƒ»°÷µ÷ªø…ƒ‹ «ME(1)£¨º¥board(∆Â≈Ã)…œŒ™ME(1)µƒŒª÷√±Ì æƒ„µƒ∆Â◊”£¨board(∆Â≈Ã)…œŒ™OTHER(2)µƒŒª÷√±Ì æ∂‘ ÷µƒ∆Â◊”°£
- * ƒ„–Ë“™∑µªÿ“ª∏ˆΩ·ππÃÂPosition£¨‘⁄x Ù–‘∫Õy Ù–‘ÃÓ…œƒ„œÎ“™¬‰◊”µƒŒª÷√°£ 
+ * Ê£ãÂ±ÄÂºÄÂßãÔºåÈ¶ñÂÖàÁî±‰Ω†Êù•ËêΩÂ≠ê
+ * ËØ∑Ê≥®ÊÑèÔºöÂè™ÊúâÂú®ÂΩìÊ£ãÂ±ÄÂàùÂßãÂåñÂêéÔºåËΩÆÂà∞‰Ω†ËêΩÂ≠êÊó∂Êâç‰ºöËß¶ÂèëËøô‰∏™ÂáΩÊï∞„ÄÇÂ¶ÇÊûúÂú®Ê£ãÂ±ÄÂàùÂßãÂåñÂÆåÊØïÂêéÔºåËΩÆÂà∞ÂØπÊâãËêΩÂ≠êÔºåÂàôËøô‰∏™ÂáΩÊï∞‰∏ç‰ºöË¢´Ëß¶Âèë„ÄÇËØ¶ËßÅÈ°πÁõÆË¶ÅÊ±Ç„ÄÇ
+ * Âú®ËøôÈáåÔºåmeÁöÑÂèñÂÄºÂè™ÂèØËÉΩÊòØME(1)ÔºåÂç≥board(Ê£ãÁõò)‰∏ä‰∏∫ME(1)ÁöÑ‰ΩçÁΩÆË°®Á§∫‰Ω†ÁöÑÊ£ãÂ≠êÔºåboard(Ê£ãÁõò)‰∏ä‰∏∫OTHER(2)ÁöÑ‰ΩçÁΩÆË°®Á§∫ÂØπÊâãÁöÑÊ£ãÂ≠ê„ÄÇ
+ * ‰Ω†ÈúÄË¶ÅËøîÂõû‰∏Ä‰∏™ÁªìÊûÑ‰ΩìPositionÔºåÂú®xÂ±ûÊÄßÂíåyÂ±ûÊÄßÂ°´‰∏ä‰Ω†ÊÉ≥Ë¶ÅËêΩÂ≠êÁöÑ‰ΩçÁΩÆ„ÄÇ 
  */
 struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
 {
     /*
      * TODO: Write your own ai here!
      * Here is a simple AI which just put chess at empty position!
-     * ¥˙◊ˆ£∫‘⁄’‚¿Ô–¥œ¬ƒ„µƒAI°£ 
-     * ’‚¿Ô”–“ª∏ˆ æ¿˝AI£¨À¸÷ªª·—∞’“µ⁄“ª∏ˆø…œ¬µƒŒª÷√Ω¯––¬‰◊”°£ 
+     * ‰ª£ÂÅöÔºöÂú®ËøôÈáåÂÜô‰∏ã‰Ω†ÁöÑAI„ÄÇ 
+     * ËøôÈáåÊúâ‰∏Ä‰∏™Á§∫‰æãAIÔºåÂÆÉÂè™‰ºöÂØªÊâæÁ¨¨‰∏Ä‰∏™ÂèØ‰∏ãÁöÑ‰ΩçÁΩÆËøõË°åËêΩÂ≠ê„ÄÇ 
      */
 
-    // œ»ø™æ÷ ±“ª∂®Œ™∞◊4
+    // ÂÖàÂºÄÂ±ÄÊó∂‰∏ÄÂÆö‰∏∫ÁôΩ4
     round = 4;
 
-    opening = verifyOpening(board);
+    openingId = verifyOpening(board);
 #ifdef DEBUG
-    printf("The opening id is %d\n", opening);
+    printf("The opening id is %d\n", openingId);
 #endif
 
-    // ø™æ÷∂® Ω
-    if (opening >= 0 && opening < OPENING_NUM)
+    // ÂºÄÂ±ÄÂÆöÂºè
+    initOpening();
+    /*switch (opening)
     {
-
-    }
-    switch (opening)
-    {
-    case 0: // ª®‘¬
+    case 0: // Ëä±Êúà
 
     default:
-        // ≤ª¬˙◊„ø™æ÷∂® Ω£¨÷±Ω”ø™ ºÀ—À˜
-        // ¿Ì¬€…œ∆¿≤‚œµÕ≥≤ªª·≥ˆœ÷∏√«Èøˆ
+        // ‰∏çÊª°Ë∂≥ÂºÄÂ±ÄÂÆöÂºèÔºåÁõ¥Êé•ÂºÄÂßãÊêúÁ¥¢
+        // ÁêÜËÆ∫‰∏äËØÑÊµãÁ≥ªÁªü‰∏ç‰ºöÂá∫Áé∞ËØ•ÊÉÖÂÜµ
         break;
-    }
+    }*/
 
     int i, j;
     struct Position preferedPos;
@@ -348,20 +192,20 @@ struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
 /*
  * Game ongoing, the competitor put the chess at the position (otherX, otherY). You should put your chess.
  * You should return a valid Position variable.
- * ∆Âæ÷Ω¯––÷–£¨∂‘∑Ω…œ“ª≤Ω¬‰◊”‘⁄(otherX, otherY)µƒŒª÷√£¨¬÷µΩƒ„¬‰◊”¡À°£
- * ‘⁄’‚¿Ô£¨meµƒ»°÷µ÷ªø…ƒ‹ «ME(1)£¨º¥board(∆Â≈Ã)…œŒ™ME(1)µƒŒª÷√±Ì æƒ„µƒ∆Â◊”£¨board(∆Â≈Ã)…œŒ™OTHER(2)µƒŒª÷√±Ì æ∂‘ ÷µƒ∆Â◊”°£
- * ƒ„–Ë“™∑µªÿ“ª∏ˆΩ·ππÃÂPosition£¨‘⁄x Ù–‘∫Õy Ù–‘ÃÓ…œƒ„œÎ“™¬‰◊”µƒŒª÷√°£ 
+ * Ê£ãÂ±ÄËøõË°å‰∏≠ÔºåÂØπÊñπ‰∏ä‰∏ÄÊ≠•ËêΩÂ≠êÂú®(otherX, otherY)ÁöÑ‰ΩçÁΩÆÔºåËΩÆÂà∞‰Ω†ËêΩÂ≠ê‰∫Ü„ÄÇ
+ * Âú®ËøôÈáåÔºåmeÁöÑÂèñÂÄºÂè™ÂèØËÉΩÊòØME(1)ÔºåÂç≥board(Ê£ãÁõò)‰∏ä‰∏∫ME(1)ÁöÑ‰ΩçÁΩÆË°®Á§∫‰Ω†ÁöÑÊ£ãÂ≠êÔºåboard(Ê£ãÁõò)‰∏ä‰∏∫OTHER(2)ÁöÑ‰ΩçÁΩÆË°®Á§∫ÂØπÊâãÁöÑÊ£ãÂ≠ê„ÄÇ
+ * ‰Ω†ÈúÄË¶ÅËøîÂõû‰∏Ä‰∏™ÁªìÊûÑ‰ΩìPositionÔºåÂú®xÂ±ûÊÄßÂíåyÂ±ûÊÄßÂ°´‰∏ä‰Ω†ÊÉ≥Ë¶ÅËêΩÂ≠êÁöÑ‰ΩçÁΩÆ„ÄÇ 
  */
 struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int otherX, int otherY)
 {
     /*
      * TODO: Write your own ai here!
      * Here is a simple AI which just put chess at empty position!
-     * ¥˙◊ˆ£∫‘⁄’‚¿Ô–¥œ¬ƒ„µƒAI°£ 
-     * ’‚¿Ô”–“ª∏ˆ æ¿˝AI£¨À¸÷ªª·—∞’“µ⁄“ª∏ˆø…œ¬µƒŒª÷√Ω¯––¬‰◊”°£ 
+     * ‰ª£ÂÅöÔºöÂú®ËøôÈáåÂÜô‰∏ã‰Ω†ÁöÑAI„ÄÇ 
+     * ËøôÈáåÊúâ‰∏Ä‰∏™Á§∫‰æãAIÔºåÂÆÉÂè™‰ºöÂØªÊâæÁ¨¨‰∏Ä‰∏™ÂèØ‰∏ãÁöÑ‰ΩçÁΩÆËøõË°åËêΩÂ≠ê„ÄÇ 
      */
 
-    // ∫Ûø™æ÷ ±“ª∂®Œ™∫⁄5
+    // ÂêéÂºÄÂ±ÄÊó∂‰∏ÄÂÆö‰∏∫Èªë5
     if (round == 0)
     {
         round = 5;
@@ -417,7 +261,7 @@ struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int oth
 
 /*
  * YOUR CODE END
- * ƒ„µƒ¥˙¬ÎΩ· ¯ 
+ * ‰Ω†ÁöÑ‰ª£Á†ÅÁªìÊùü 
  */
 
 void place(int x, int y, int z)
