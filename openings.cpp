@@ -64,9 +64,7 @@ int main()
         out << "},";
     }
     out << "};" << endl;
-    //out.close();
     ifstream in("./openings/formula.txt");
-    //out.open("formula.h");
     out << "const char* formula[OPENING_NUM][4]={";
     int formula_pos[26][2] = {};
     for (int i = 0; i < 26; i++)
@@ -87,7 +85,7 @@ int main()
         {
             string str;
             getline(in, temp);
-            out << "\"" << temp << "\",";
+            out << "\"" << temp << " \",";
             stringstream ss(temp);
             ss >> str;
             auto pos = getPos(str);

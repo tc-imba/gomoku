@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define BOARD_SIZE 15
 #define EMPTY 0
@@ -54,7 +55,9 @@ const int openings[OPENING_NUM][3][2];
 const char *formula[OPENING_NUM][4];
 const int formula_pos[OPENING_NUM][2];
 int openingId;
-
+struct Position openingNow[4][8];
+int openingPos[2];
+int openingNum[4];
 
 #ifdef DEBUG
 
@@ -66,7 +69,11 @@ const char* formula[OPENING_NUM][4]={{"I8 G7 I7 J7","J7 G7 I7 I8",},{"G8 I10","J
 const int formula_pos[OPENING_NUM][2]={{2,2},{4,3},{4,1},{4,1},{4,4},{4,1},{4,2},{4,1},{4,3},{4,1},{4,1},{4,1},{4,1},{4,1},{4,3},{4,3},{4,2},{4,4},{1,1},{4,3},{1,1},{4,1},{4,1},{4,1},{4,2},{1,1},};
 #endif
 
-
+/**
+ * Verify a certain opening from the board
+ * @param board
+ * @return int openingId
+ */
 int verifyOpening(const char board[BOARD_SIZE][BOARD_SIZE])
 {
     int order[3] = {OTHER, ME, OTHER};
@@ -92,130 +99,58 @@ int verifyOpening(const char board[BOARD_SIZE][BOARD_SIZE])
     return -1;
 }
 
-struct Position getPos(char *str)
+/**
+ * Get the position of a string such as J10 on a standard gomoku board
+ * @param begin
+ * @param end
+ * @return struct Position
+ */
+struct Position getPos(const char *begin, const char *end)
 {
-
+    struct Position p;
+    p.x = (*begin) - 'A';
+    p.y = BOARD_SIZE - ((*(end - 1)) - '0');
+    if (end - begin > 2)
+    {
+        p.y -= 10 * ((*(begin + 1)) - '0');
+    }
+    return p;
 }
 
-void initOpening()
+/**
+ * According to the current opening, init the formula from the strings
+ * @return boolean
+ */
+int initOpening()
 {
-    if (openingId >= 0 && openingId < OPENING_NUM)
+    if (openingId < 0 || openingId >= OPENING_NUM)
     {
-        return;
+        return 0;
     }
-    for (int i = 0; i < formula_pos[openingId][0]; i++)
+    openingPos[0] = formula_pos[openingId][0];
+    openingPos[1] = formula_pos[openingId][1];
+    for (int i = 0; i < openingPos[0]; i++)
     {
         const char *p = formula[openingId][i];
-        while (p++)
+        const char *p2 = strchr(p, ' ');
+        int count = 0;
+        while (p2)
         {
-            
+            openingNow[i][count++] = getPos(p, p2);
+            p = p2 + 1;
+            p2 = strchr(p, ' ');
         }
+        openingNum[i] = count;
     }
+    return 1;
 }
 
-/*
- * You should init your AI here
- * 在这里初始化你的AI
+/**
+ * The main search function
+ * @return struct Position
  */
-void initAI()
+struct Position search()
 {
-#ifdef DEBUG
-    printf("Begin to initialize the brain\n");
-#endif
-    round = 0;
-
-    // 初始化开局定式
-
-
-}
-
-
-/*
- * Game Start, you will put the first chess.
- * Warning: This method will only be called when after the initialize ofi the  map, it is your turn to put the chess. 
- * Or this method will not be called.
- * You should return a valid Position variable.
- * 棋局开始，首先由你来落子
- * 请注意：只有在当棋局初始化后，轮到你落子时才会触发这个函数。如果在棋局初始化完毕后，轮到对手落子，则这个函数不会被触发。详见项目要求。
- * 在这里，me的取值只可能是ME(1)，即board(棋盘)上为ME(1)的位置表示你的棋子，board(棋盘)上为OTHER(2)的位置表示对手的棋子。
- * 你需要返回一个结构体Position，在x属性和y属性填上你想要落子的位置。 
- */
-struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
-{
-    /*
-     * TODO: Write your own ai here!
-     * Here is a simple AI which just put chess at empty position!
-     * 代做：在这里写下你的AI。 
-     * 这里有一个示例AI，它只会寻找第一个可下的位置进行落子。 
-     */
-
-    // 先开局时一定为白4
-    round = 4;
-
-    openingId = verifyOpening(board);
-#ifdef DEBUG
-    printf("The opening id is %d\n", openingId);
-#endif
-
-    // 开局定式
-    initOpening();
-    /*switch (opening)
-    {
-    case 0: // 花月
-
-    default:
-        // 不满足开局定式，直接开始搜索
-        // 理论上评测系统不会出现该情况
-        break;
-    }*/
-
-    int i, j;
-    struct Position preferedPos;
-
-    for (i = 0; i < BOARD_SIZE; i++)
-    {
-        for (j = 0; j < BOARD_SIZE; j++)
-        {
-            if (EMPTY == board[i][j])
-            {
-                preferedPos.x = i;
-                preferedPos.y = j;
-                return preferedPos;
-            }
-        }
-    }
-
-    return preferedPos;
-}
-
-
-/*
- * Game ongoing, the competitor put the chess at the position (otherX, otherY). You should put your chess.
- * You should return a valid Position variable.
- * 棋局进行中，对方上一步落子在(otherX, otherY)的位置，轮到你落子了。
- * 在这里，me的取值只可能是ME(1)，即board(棋盘)上为ME(1)的位置表示你的棋子，board(棋盘)上为OTHER(2)的位置表示对手的棋子。
- * 你需要返回一个结构体Position，在x属性和y属性填上你想要落子的位置。 
- */
-struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int otherX, int otherY)
-{
-    /*
-     * TODO: Write your own ai here!
-     * Here is a simple AI which just put chess at empty position!
-     * 代做：在这里写下你的AI。 
-     * 这里有一个示例AI，它只会寻找第一个可下的位置进行落子。 
-     */
-
-    // 后开局时一定为黑5
-    if (round == 0)
-    {
-        round = 5;
-    }
-    else
-    {
-        round += 2;
-    }
-
-
     int i, j;
     struct Position preferedPos;
 
@@ -254,9 +189,91 @@ struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int oth
             }
         }
     }
-
-
     return preferedPos;
+}
+
+/*
+ * You should init your AI here
+ * 在这里初始化你的AI
+ */
+void initAI()
+{
+#ifdef DEBUG
+    printf("Begin to initialize the brain\n");
+#endif
+    round = 0;
+
+    srand((unsigned int) (time(NULL)));
+
+}
+
+
+/*
+ * Game Start, you will put the first chess.
+ * Warning: This method will only be called when after the initialize ofi the  map, it is your turn to put the chess. 
+ * Or this method will not be called.
+ * You should return a valid Position variable.
+ * 棋局开始，首先由你来落子
+ * 请注意：只有在当棋局初始化后，轮到你落子时才会触发这个函数。如果在棋局初始化完毕后，轮到对手落子，则这个函数不会被触发。详见项目要求。
+ * 在这里，me的取值只可能是ME(1)，即board(棋盘)上为ME(1)的位置表示你的棋子，board(棋盘)上为OTHER(2)的位置表示对手的棋子。
+ * 你需要返回一个结构体Position，在x属性和y属性填上你想要落子的位置。 
+ */
+struct Position aiBegin(const char board[BOARD_SIZE][BOARD_SIZE], int me)
+{
+    /*
+     * TODO: Write your own ai here!
+     * Here is a simple AI which just put chess at empty position!
+     * 代做：在这里写下你的AI。 
+     * 这里有一个示例AI，它只会寻找第一个可下的位置进行落子。 
+     */
+
+    // 先开局时一定为白4
+    round = 4;
+
+    openingId = verifyOpening(board);
+#ifdef DEBUG
+    printf("The opening id is %d\n", openingId);
+#endif
+
+    // 开局定式
+    if (initOpening())
+    {
+        int ran = rand() % openingPos[1];
+        return openingNow[ran][0];
+    }
+
+    return search();
+}
+
+
+/*
+ * Game ongoing, the competitor put the chess at the position (otherX, otherY). You should put your chess.
+ * You should return a valid Position variable.
+ * 棋局进行中，对方上一步落子在(otherX, otherY)的位置，轮到你落子了。
+ * 在这里，me的取值只可能是ME(1)，即board(棋盘)上为ME(1)的位置表示你的棋子，board(棋盘)上为OTHER(2)的位置表示对手的棋子。
+ * 你需要返回一个结构体Position，在x属性和y属性填上你想要落子的位置。 
+ */
+struct Position aiTurn(const char board[BOARD_SIZE][BOARD_SIZE], int me, int otherX, int otherY)
+{
+    /*
+     * TODO: Write your own ai here!
+     * Here is a simple AI which just put chess at empty position!
+     * 代做：在这里写下你的AI。 
+     * 这里有一个示例AI，它只会寻找第一个可下的位置进行落子。 
+     */
+
+    // 后开局时一定为黑5
+    if (round == 0)
+    {
+        round = 5;
+    }
+    else
+    {
+        round += 2;
+    }
+
+
+    return search();
 }
 
 /*
